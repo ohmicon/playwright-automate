@@ -3,6 +3,9 @@ import { LoginPage } from "../../src/pages/common/login-page";
 import dataSetting from "../../data/common/TestSetting.json";
 import { setupProjectType } from "../../data/generalSettings/setupProjectType";
 import { SetupDocumentNumbering } from "../../data/generalSettings/SetupDocumentNumbering";
+import { config } from 'dotenv';
+config();
+const {COMPANY} = process.env;
 const data = dataSetting.Login;
 const dataLogin = dataSetting.Login;
 test("Setup Document Numbering", async ({ page }) => {
@@ -10,7 +13,7 @@ test("Setup Document Numbering", async ({ page }) => {
   await page.goto(dataLogin.site);
   const loginPage = new LoginPage(page);
   await loginPage.goto(dataLogin.site);
-  await loginPage.login(dataLogin.username, dataLogin.password, 12);
+  await loginPage.login(dataLogin.username, dataLogin.password, Number(COMPANY));
   await page.waitForTimeout(3000);
   await page.getByRole("link", { name: "ระบบจัดการข้อมูลกลาง" }).click();
   await page.locator("a").filter({ hasText: "Genaral Settings" }).click();

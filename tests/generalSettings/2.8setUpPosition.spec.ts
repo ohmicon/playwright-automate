@@ -3,7 +3,9 @@ import dataSetting from "../../data/common/TestSetting.json"
 import { LoginPage } from "../../src/pages/common/login-page.js"
 import { setupPositionData } from "../../data/generalSettings/setUpPosition.js";
 import { getSharedProjectType } from "../../src/utils/store/projectType.store.js";
-
+import { config } from 'dotenv';
+config();
+const {COMPANY} = process.env;
 const dataLogin = dataSetting.Login;
 const data = setupPositionData;
 console.log('getSharedProjectType', getSharedProjectType("code"))
@@ -13,7 +15,7 @@ test.describe("Setup Position", async () => {
         await page.goto(dataLogin.site);
         const loginPage = new LoginPage(page);
         await loginPage.goto(dataLogin.site);
-        await loginPage.login(dataLogin.username, dataLogin.password, 0);
+        await loginPage.login(dataLogin.username, dataLogin.password, Number(COMPANY));
         await page.waitForLoadState();
         await page
           .getByRole("link", { name: "ระบบจัดการข้อมูลกลาง" })

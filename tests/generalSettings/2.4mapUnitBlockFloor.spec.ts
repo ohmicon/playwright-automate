@@ -2,17 +2,19 @@ import { expect, test } from "@playwright/test";
 import dataSetting from "../../data/common/TestSetting.json";
 import { LoginPage } from "../../src/pages/common/login-page";
 import { mapUnitBlockFloorData } from "../../data/generalSettings/mapUnitBlockFloor";
+import { config } from 'dotenv';
+config();
+const {COMPANY} = process.env;
 
 const dataLogin = dataSetting.Login;
 const data = mapUnitBlockFloorData;
 
 test.describe("Genaral Settings", async () => {
   test("Setup Phase Building", async ({ page }) => {
-    test.setTimeout(600000);
     await page.goto(dataLogin.site);
     const loginPage = new LoginPage(page);
     await loginPage.goto(dataLogin.site);
-    await loginPage.login(dataLogin.username, dataLogin.password, 1);
+    await loginPage.login(dataLogin.username, dataLogin.password, Number(COMPANY));
     await page.locator(`[class="panel-title"]`).first().click({ timeout: 10000 });
     await page.locator("a").filter({ hasText: "Genaral Settings" }).click();
     await page.getByRole("link", { name: " Setup Project Unit" }).click();

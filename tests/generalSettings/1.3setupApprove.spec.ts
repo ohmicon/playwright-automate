@@ -3,6 +3,9 @@ import { LoginPage } from "../../src/pages/common/login-page.js";
 import dataSetting from "../../data/common/TestSetting.json";
 import SetupApprove from "../../data/generalSettings/setupApprove.js";
 import {setupUserApprove,setupUserApproveGroup,chooseMenu} from '../../src/pages/setapprove-page.js';
+import { config } from 'dotenv';
+config();
+const {COMPANY} = process.env;
 const data = dataSetting.Login;
 const setGroupData = SetupApprove[0]
 
@@ -21,7 +24,7 @@ test.describe("Setup Approve", () => {
     await page.goto(data.site);
     const loginPage = new LoginPage(page);
     await loginPage.goto(data.site);
-    await loginPage.login(data.username, data.password);
+    await loginPage.login(data.username, data.password,Number(COMPANY));
     await page.waitForTimeout(3000);
     await page.locator(`[class="panel-title"]`).nth(0).click()
     await expect(page).not.toHaveURL(data.site+"panel/office");
@@ -120,7 +123,7 @@ test.describe("Setup Approve", () => {
     //test.setTimeout(6000);
       await page.goto(currentUrl);
       await chooseMenu(page);
-      await page.waitForTimeout(3000)
+      // await page.waitForTimeout(3000)
       await page.locator(`a[onclick="choose('4')"]`).click();
       await setupUserApproveGroup(page);
       await page.waitForTimeout(3000)

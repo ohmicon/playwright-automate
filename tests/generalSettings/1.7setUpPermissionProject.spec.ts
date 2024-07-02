@@ -2,6 +2,9 @@ import { expect, test } from "@playwright/test";
 import dataSetting from "../../data/common/TestSetting.json"
 import { LoginPage } from "../../src/pages/common/login-page.js"
 import { setupPermissionPositionData } from "../../data/generalSettings/setUpPermissionProject.js";
+import { config } from 'dotenv';
+config();
+const {COMPANY} = process.env;
 
 const dataLogin = dataSetting.Login;
 const data = setupPermissionPositionData;
@@ -11,7 +14,7 @@ test.describe("Setup Position", async () => {
         await page.goto(dataLogin.site);
         const loginPage = new LoginPage(page);
         await loginPage.goto(dataLogin.site);
-        await loginPage.login(dataLogin.username, dataLogin.password, 0);
+        await loginPage.login(dataLogin.username, dataLogin.password, Number(COMPANY));
        await page.locator(`[class="panel-title"]`).nth(0).click()
         await page.waitForLoadState();
         await page.locator('a').filter({ hasText: 'Genaral Settings' }).click();

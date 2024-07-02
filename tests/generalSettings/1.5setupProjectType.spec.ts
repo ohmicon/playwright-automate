@@ -5,15 +5,18 @@ import { fullScreenMode } from "../../src/pages/common/fullScreenMode";
 import setupPermissionReport from "../../data/generalSettings/setupPermissionReport";
 import { setupProjectType } from "../../data/generalSettings/setupProjectType";
 import { getSharedProjectType } from "../../src/utils/store/projectType.store";
+import { config } from 'dotenv';
+config();
+const {COMPANY} = process.env;
+
 const data = dataSetting.Login;
 
+
+
 test("setup ProjectType", async ({ page }) => {
-  //fullScreenMode(page);
-  //test.setTimeout(6000);
-console.log(getSharedProjectType('ProjectCode'))
   const loginPage = new LoginPage(page);
   await loginPage.goto(data.site);
-  await loginPage.login(data.username, data.password,1);
+  await loginPage.login(data.username, data.password, Number(COMPANY));
   // await page.goto(data.site + "/auth/login/" + data.username + "");
   await page.locator(`[class="panel-title"]`).nth(0).click()
   await page.locator("a").filter({ hasText: "Genaral Settings" }).click();

@@ -4,6 +4,9 @@ import dataSetting from "../../data/common/TestSetting.json";
 import { fullScreenMode } from "../../src/pages/common/fullScreenMode";
 import { setupModelType } from "../../data/generalSettings/setupModelType";
 import { setupBlockFloor } from "../../data/generalSettings/setupBlockFloor";
+import { config } from 'dotenv';
+config();
+const {COMPANY} = process.env;
 const data = dataSetting.Login;
 const dataLogin = dataSetting.Login;
 test("Setup Model Type", async ({ page }) => {
@@ -11,7 +14,7 @@ test("Setup Model Type", async ({ page }) => {
   await page.goto(dataLogin.site);
   const loginPage = new LoginPage(page);
   await loginPage.goto(dataLogin.site);
-  await loginPage.login(dataLogin.username, dataLogin.password, 0);
+  await loginPage.login(dataLogin.username, dataLogin.password, Number(COMPANY));
   await page.waitForTimeout(3000);
   await page.getByRole("link", { name: "ระบบจัดการข้อมูลกลาง" }).click();
   await page.locator("a").filter({ hasText: "Genaral Settings" }).click();

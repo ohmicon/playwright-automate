@@ -18,6 +18,7 @@ export class LoginPage {
   }
   // สร้างเมทอด goto() เพื่อไปยังหน้า Login ที่ URL 'https://example.com/login'
   async goto(site_url: string): Promise<void> {
+    await this.page.waitForLoadState("load")
     await this.page.goto(site_url + "/auth/index");
     await this.page.waitForLoadState("load"); // รอให้หน้าโหลดเสร็จ
   }
@@ -38,7 +39,7 @@ export class LoginPage {
     await this.page
       .getByRole("button", { name: "Login" })
       .click({ force: true });
-    let retries = 115;
+    let retries = 5;
     let attempt = 0;
     let delay = 1000;
     while (attempt < retries) {

@@ -5,6 +5,9 @@ import { fullScreenMode } from "../../src/pages/common/fullScreenMode";
 import setupPermissionReport from "../../data/generalSettings/setupPermissionReport";
 import { setupProjectType } from "../../data/generalSettings/setupProjectType";
 import { setupModelType } from "../../data/generalSettings/setupModelType";
+import { config } from 'dotenv';
+config();
+const {COMPANY} = process.env;
 const data = dataSetting.Login;
 
 test("Setup Model Type", async ({ page }) => {
@@ -13,7 +16,7 @@ test("Setup Model Type", async ({ page }) => {
 
   const loginPage = new LoginPage(page);
   await loginPage.goto(data.site);
-  await loginPage.login(data.username, data.password, 12);
+  await loginPage.login(data.username, data.password, Number(COMPANY));
   // await page.goto(data.site + "/auth/login/" + data.username + "/PPA");
   await page.locator(`[class="panel-title"]`).nth(0).click()
   await page.locator("a").filter({ hasText: "Genaral Settings" }).click();

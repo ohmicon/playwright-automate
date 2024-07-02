@@ -4,6 +4,9 @@ import dataSetting from "../../data/common/TestSetting.json";
 import { fullScreenMode } from "../../src/pages/common/fullScreenMode";
 import setupPermissionReport from "../../data/generalSettings/setupPermissionReport";
 import { setupProjectType } from "../../data/generalSettings/setupProjectType";
+import { config } from 'dotenv';
+config();
+const {COMPANY} = process.env;
 const data = dataSetting.Login;
 
 test("Setup Cost Center", async ({ page }) => {
@@ -12,7 +15,7 @@ test("Setup Cost Center", async ({ page }) => {
 
   const loginPage = new LoginPage(page);
   await loginPage.goto(data.site);
-  await loginPage.login(data.username, data.password);
+  await loginPage.login(data.username, data.password,Number(COMPANY));
   // await page.goto(data.site + "/auth/login/" + data.username + "/PPA");
   await page.getByRole("link", { name: "ระบบจัดการข้อมูลกลาง" }).click();
   await page.locator("a").filter({ hasText: "Cost Control" }).click();
@@ -30,7 +33,6 @@ test("Setup Cost Center", async ({ page }) => {
   // await page.locator('#valid_from').fill('2024-06-01');
   await page.locator("#level").selectOption("1");
   await page.getByRole("button", { name: "" }).nth(2).click();
-  await page.locator("#basiccc_b_filter").getByLabel("Filter:").click();
   await page.locator("#basiccc_b_filter").getByLabel("Filter:").fill("");
   await page.locator("#basiccc_b_filter").getByLabel("Filter:").click();
   await page
