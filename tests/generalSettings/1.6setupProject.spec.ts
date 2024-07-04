@@ -6,6 +6,10 @@ import SetupProjects, {
   Consultants,
   Admin,
 } from "../../data/generalSettings/setupProject";
+import { LoginSetting } from "../../data/common/TestSetting";
+import { config } from "dotenv";
+const {COMPANY,SITE} = process.env;
+config();
 const data = dataSetting.Login;
 
 test.describe("Setup Project", () => {
@@ -14,9 +18,12 @@ test.describe("Setup Project", () => {
     //fullScreenMode(page)
 
     await page.pause();
+    const loginDetails = LoginSetting(SITE || "");
+    const { site, username, password } = loginDetails;
     const loginPage = new LoginPage(page);
-    await loginPage.goto(data.site);
-    await loginPage.login(data.username, data.password, 12);
+  
+    await loginPage.goto(site);
+    await loginPage.login(username, password, Number(COMPANY));
 
     await page.locator(`[class="panel-title"]`).nth(0).click();
     await expect(page).not.toHaveURL(data.site + "panel/office");

@@ -4,16 +4,20 @@ import dataSetting from "../../data/common/TestSetting.json";
 import { setupProjectType } from "../../data/generalSettings/setupProjectType";
 import { SetupDocumentNumbering } from "../../data/generalSettings/SetupDocumentNumbering";
 import { config } from 'dotenv';
+import { LoginSetting } from "../../data/common/TestSetting";
 config();
-const {COMPANY} = process.env;
+const {COMPANY,SITE} = process.env;
 const data = dataSetting.Login;
 const dataLogin = dataSetting.Login;
 test("Setup Document Numbering", async ({ page }) => {
   //fullScreenMode(page);
-  await page.goto(dataLogin.site);
-  const loginPage = new LoginPage(page);
-  await loginPage.goto(dataLogin.site);
-  await loginPage.login(dataLogin.username, dataLogin.password, Number(COMPANY));
+  const loginDetails = LoginSetting(SITE || "");
+      const { site, username, password } = loginDetails;
+      const loginPage = new LoginPage(page);
+  
+      await loginPage.goto(site);
+      await loginPage.login(username, password, Number(COMPANY));
+    // await loginPage.loginByUserType("ADMIN")
   await page.waitForTimeout(3000);
   await page.getByRole("link", { name: "ระบบจัดการข้อมูลกลาง" }).click();
   await page.locator("a").filter({ hasText: "Genaral Settings" }).click();

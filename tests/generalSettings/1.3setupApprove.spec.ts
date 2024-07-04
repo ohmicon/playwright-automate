@@ -4,8 +4,9 @@ import dataSetting from "../../data/common/TestSetting.json";
 import SetupApprove from "../../data/generalSettings/setupApprove.js";
 import {setupUserApprove,setupUserApproveGroup,chooseMenu} from '../../src/pages/setapprove-page.js';
 import { config } from 'dotenv';
+import { LoginSetting } from "../../data/common/TestSetting.js";
 config();
-const {COMPANY} = process.env;
+const {COMPANY,SITE} = process.env;
 const data = dataSetting.Login;
 const setGroupData = SetupApprove[0]
 
@@ -21,10 +22,12 @@ test.describe("Setup Approve", () => {
 
   test("Test Setup Approve BOM", async () => {
     // //test.setTimeout(6000);
-    await page.goto(data.site);
+    const loginDetails = LoginSetting(SITE || "");
+    const { site, username, password } = loginDetails;
     const loginPage = new LoginPage(page);
-    await loginPage.goto(data.site);
-    await loginPage.login(data.username, data.password,Number(COMPANY));
+  
+    await loginPage.goto(site);
+    await loginPage.login(username, password, Number(COMPANY));
     await page.waitForTimeout(3000);
     await page.locator(`[class="panel-title"]`).nth(0).click()
     await expect(page).not.toHaveURL(data.site+"panel/office");

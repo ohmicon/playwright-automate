@@ -5,17 +5,21 @@ import { fullScreenMode } from "../../src/pages/common/fullScreenMode";
 import setupPermissionReport from "../../data/generalSettings/setupPermissionReport";
 import { setupProjectType } from "../../data/generalSettings/setupProjectType";
 import { config } from 'dotenv';
+import { LoginSetting } from "../../data/common/TestSetting";
 config();
-const {COMPANY} = process.env;
+const {COMPANY,SITE} = process.env;
 const data = dataSetting.Login;
 
 test("Setup Cost Center", async ({ page }) => {
   //fullScreenMode(page);
   // test.setTimeout(600000);
 
-  const loginPage = new LoginPage(page);
-  await loginPage.goto(data.site);
-  await loginPage.login(data.username, data.password,Number(COMPANY));
+  const loginDetails = LoginSetting(SITE || "");
+      const { site, username, password } = loginDetails;
+      const loginPage = new LoginPage(page);
+  
+      await loginPage.goto(site);
+      await loginPage.login(username, password, Number(COMPANY));
   // await page.goto(data.site + "/auth/login/" + data.username + "/PPA");
   await page.getByRole("link", { name: "ระบบจัดการข้อมูลกลาง" }).click();
   await page.locator("a").filter({ hasText: "Cost Control" }).click();

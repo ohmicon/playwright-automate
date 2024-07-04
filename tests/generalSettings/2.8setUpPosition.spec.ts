@@ -20,8 +20,6 @@ interface Data {
 
 const data: Data = setupPositionData as Data;
 
-console.log('getSharedProjectType', getSharedProjectType("code"));
-
 test.describe("Setup Position", () => {
   test("Setup Position", async ({ page }) => {
 

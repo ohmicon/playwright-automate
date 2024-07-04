@@ -2,8 +2,9 @@ import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../src/pages/common/login-page";
 import dataSetting from "../../data/common/TestSetting.json";
 import { config } from 'dotenv';
+import { LoginSetting } from "../../data/common/TestSetting";
 config();
-const {COMPANY} = process.env;
+const {COMPANY,SITE} = process.env;
 const data = dataSetting.Login;
 
 test.describe("Setup Permission", () => {
@@ -11,9 +12,12 @@ test.describe("Setup Permission", () => {
     test.setTimeout(6000);
     await page.pause();
 
+    const loginDetails = LoginSetting(SITE || "");
+    const { site, username, password } = loginDetails;
     const loginPage = new LoginPage(page);
-    await loginPage.goto(data.site);
-    await loginPage.login(data.username, data.password,Number(COMPANY));
+
+    await loginPage.goto(site);
+    await loginPage.login(username, password, Number(COMPANY));
     await page.locator(`[class="panel-title"]`).nth(0).click()
     await expect(page).not.toHaveURL(data.site + "panel/office");
     await page.waitForLoadState();

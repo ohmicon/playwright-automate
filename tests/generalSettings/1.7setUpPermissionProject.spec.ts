@@ -3,18 +3,21 @@ import dataSetting from "../../data/common/TestSetting.json"
 import { LoginPage } from "../../src/pages/common/login-page.js"
 import { setupPermissionPositionData } from "../../data/generalSettings/setUpPermissionProject.js";
 import { config } from 'dotenv';
+import { LoginSetting } from "../../data/common/TestSetting.js";
 config();
-const {COMPANY} = process.env;
+const {COMPANY,SITE} = process.env;
 
 const dataLogin = dataSetting.Login;
 const data = setupPermissionPositionData;
 
 test.describe("Setup Position", async () => {
     test("Setup Position", async ({ page }) => {
-        await page.goto(dataLogin.site);
-        const loginPage = new LoginPage(page);
-        await loginPage.goto(dataLogin.site);
-        await loginPage.login(dataLogin.username, dataLogin.password, Number(COMPANY));
+        const loginDetails = LoginSetting(SITE || "");
+  const { site, username, password } = loginDetails;
+  const loginPage = new LoginPage(page);
+
+  await loginPage.goto(site);
+  await loginPage.login(username, password, Number(COMPANY));
        await page.locator(`[class="panel-title"]`).nth(0).click()
         await page.waitForLoadState();
         await page.locator('a').filter({ hasText: 'Genaral Settings' }).click();

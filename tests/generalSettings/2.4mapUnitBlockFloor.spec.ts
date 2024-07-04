@@ -3,18 +3,22 @@ import dataSetting from "../../data/common/TestSetting.json";
 import { LoginPage } from "../../src/pages/common/login-page";
 import { mapUnitBlockFloorData } from "../../data/generalSettings/mapUnitBlockFloor";
 import { config } from 'dotenv';
+import { LoginSetting } from "../../data/common/TestSetting";
 config();
-const {COMPANY} = process.env;
+const {COMPANY,SITE} = process.env;
 
-const dataLogin = dataSetting.Login;
+// const dataLogin = dataSetting.Login;
 const data = mapUnitBlockFloorData;
 
 test.describe("Genaral Settings", async () => {
   test("Setup Phase Building", async ({ page }) => {
-    await page.goto(dataLogin.site);
-    const loginPage = new LoginPage(page);
-    await loginPage.goto(dataLogin.site);
-    await loginPage.login(dataLogin.username, dataLogin.password, Number(COMPANY));
+    const loginDetails = LoginSetting(SITE || "");
+      const { site, username, password } = loginDetails;
+      const loginPage = new LoginPage(page);
+  
+      await loginPage.goto(site);
+      await loginPage.login(username, password, Number(COMPANY));
+    // await loginPage.loginByUserType("ADMIN")
     await page.locator(`[class="panel-title"]`).first().click({ timeout: 10000 });
     await page.locator("a").filter({ hasText: "Genaral Settings" }).click();
     await page.getByRole("link", { name: " Setup Project Unit" }).click();

@@ -6,17 +6,20 @@ import setupPermissionReport from "../../data/generalSettings/setupPermissionRep
 import { setupProjectType } from "../../data/generalSettings/setupProjectType";
 import { setupModelType } from "../../data/generalSettings/setupModelType";
 import { config } from 'dotenv';
+import { LoginSetting } from "../../data/common/TestSetting";
 config();
-const {COMPANY} = process.env;
+const {COMPANY,SITE} = process.env;
 const data = dataSetting.Login;
 
 test("Setup Model Type", async ({ page }) => {
   //fullScreenMode(page);
  // test.setTimeout(6000);
+ const loginDetails = LoginSetting(SITE || "");
+ const { site, username, password } = loginDetails;
+ const loginPage = new LoginPage(page);
 
-  const loginPage = new LoginPage(page);
-  await loginPage.goto(data.site);
-  await loginPage.login(data.username, data.password, Number(COMPANY));
+ await loginPage.goto(site);
+ await loginPage.login(username, password, Number(COMPANY));
   // await page.goto(data.site + "/auth/login/" + data.username + "/PPA");
   await page.locator(`[class="panel-title"]`).nth(0).click()
   await page.locator("a").filter({ hasText: "Genaral Settings" }).click();

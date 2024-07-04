@@ -4,18 +4,22 @@ import dataSetting from "../../data/common/TestSetting.json";
 import { fullScreenMode } from "../../src/pages/common/fullScreenMode";
 import setupPermissionReport from "../../data/generalSettings/setupPermissionReport";
 import { config } from 'dotenv';
+import { LoginSetting } from "../../data/common/TestSetting";
 config();
-const {COMPANY} = process.env;
+const {COMPANY,SITE} = process.env;
 
 
 const data = dataSetting.Login;
 const dataLogin = dataSetting.Login;
 test("Setup Permission Report", async ({ page }) => {
   test.setTimeout(600000);
-  await page.goto(dataLogin.site);
+  
+  const loginDetails = LoginSetting(SITE || "");
+  const { site, username, password } = loginDetails;
   const loginPage = new LoginPage(page);
-  await loginPage.goto(dataLogin.site);
-  await loginPage.login(dataLogin.username, dataLogin.password, Number(COMPANY)); 
+
+  await loginPage.goto(site);
+  await loginPage.login(username, password, Number(COMPANY));
   await page.locator(`[class="panel-title"]`).nth(0).click();
   await page.locator("a").filter({ hasText: "Genaral Settings" }).click();
   // await page.getByRole("link", { name: " Setup Permission" }).click();
