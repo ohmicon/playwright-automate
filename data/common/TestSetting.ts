@@ -14,7 +14,7 @@ const LoginSetting = (site: string): any => {
   switch (site) {
     case "soken":
       data.site = "https://soken-cm-test.iconframework.com/";
-      data.username = "admin";
+      data.username = "soken01";
       data.password = "123456";
       return data;
 
@@ -41,6 +41,12 @@ const LoginSetting = (site: string): any => {
       data.username = "admin";
       data.password = "123456";
       return data;
+    
+      case "savvy":
+        data.site = "https://savvy-cm-test.iconframework.com/";
+        data.username = "admin";
+        data.password = "123456";
+        return data;
 
     default:
       return 'ไม่มี site นี้';

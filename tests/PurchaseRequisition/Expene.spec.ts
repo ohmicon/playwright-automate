@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../src/pages/common/login-page";
 import { describe } from "node:test";
 import dataSetting from "../../data/common/TestSetting.json";
+import { LoginSetting } from "../../data/common/TestSetting";
 
 const data = dataSetting.Login; 
 const deleteRow = async (page) => {
@@ -9,12 +10,17 @@ const deleteRow = async (page) => {
   await page.getByRole("button", { name: "Ok" }).click();
 };
 
+const {COMPANY,SITE} = process.env;
+
 describe("ระบบจัดการในสำนักงาน", () => {
   test("New PR", async ({ page }) => {
     await page.pause();
-    const loginPage = new LoginPage(page);
-    await loginPage.goto(data.site);
-    await loginPage.login(data.username, data.password,0);
+    const loginDetails = LoginSetting(SITE || "");
+      const { site, username, password } = loginDetails;
+      const loginPage = new LoginPage(page);
+  
+      await loginPage.goto(site);
+      await loginPage.login(username, password, Number(COMPANY));
 
     await page.locator(`[class="panel-title"]`).nth(2).click() 
     await page.getByRole("link", { name: " New PR" }).click();
